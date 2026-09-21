@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  {% if session.user_id %}
+  <nav>
+    <span class="nav-brand">Spendly</span>
+    <div class="nav-links">
+      <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Dashboard</a>
+      <a href="/add" {% if request.path == '/add' %}class="active"{% endif %}>+ Add</a>
+      <a href="/history" {% if request.path == '/history' %}class="active"{% endif %}>History</a>
+      <a href="/logout" class="logout">Log out</a>
+    </div>
+  </nav>
+  {% endif %}
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

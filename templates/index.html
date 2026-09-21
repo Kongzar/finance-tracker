@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Hey, {{ username }}</h1>
+  <p class="subtitle">Here's where your money stands.</p>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-card income-card">
+    <span class="card-label">Total Income</span>
+    <span class="card-amount">R {{ "%.2f"|format(income) }}</span>
+  </div>
+  <div class="summary-card expense-card">
+    <span class="card-label">Total Expenses</span>
+    <span class="card-amount">R {{ "%.2f"|format(expenses) }}</span>
+  </div>
+  <div class="summary-card balance-card {% if balance < 0 %}negative{% endif %}">
+    <span class="card-label">Balance</span>
+    <span class="card-amount">R {{ "%.2f"|format(balance) }}</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <h2>Recent Transactions</h2>
+    <a href="/history" class="link-subtle">View all →</a>
+  </div>
+
+  {% if transactions %}
+  <table class="tx-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Note</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tx in transactions %}
+      <tr>
+        <td class="mono">{{ tx.date }}</td>
+        <td><span class="badge badge-{{ tx.type }}">{{ tx.category }}</span></td>
+        <td class="note-col">{{ tx.note or "—" }}</td>
+        <td class="mono amount-{{ tx.type }}">
+          {{ "+" if tx.type == "income" else "-" }}R {{ "%.2f"|format(tx.amount) }}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    No transactions yet. <a href="/add">Add your first one →</a>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}
